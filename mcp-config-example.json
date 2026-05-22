@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "context": {
+      "command": "node",
+      "args": ["d:/manyao.zhu/mcp/context/dist/index.js"]
+    }
+  }
+}
