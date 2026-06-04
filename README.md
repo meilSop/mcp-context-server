@@ -10,7 +10,7 @@
 - **全文搜索** - 跨所有上下文文件搜索关键词
 - **LLM 智能压缩** - 文件超过阈值时自动调用 LLM 进行智能摘要
 - **自动加载** - 新会话开始时自动恢复最相关的上下文
-- **多编辑器兼容** - 支持 Claude Code、Qoder、Cursor、Trae、Codex 等
+- **多编辑器兼容** - 支持 Claude Code、Qoder、Cursor、Trae、Codex、CodeBuddy 等
 
 ## 工作原理
 
@@ -235,6 +235,38 @@ claude mcp add context node d:/manyao.zhu/mcp/context/dist/index.js
 }
 ```
 
+### CodeBuddy（腾讯云代码助手）
+
+CodeBuddy 支持用户级和项目级两种 MCP 配置方式：
+
+**用户级（全局）**：编辑 `~/.codebuddy/mcp.json`（macOS/Linux）或 `%USERPROFILE%\.codebuddy\mcp.json`（Windows）：
+
+```json
+{
+  "mcpServers": {
+    "context": {
+      "command": "node",
+      "args": ["d:/manyao.zhu/mcp/context/dist/index.js"]
+    }
+  }
+}
+```
+
+**项目级（推荐）**：在项目根目录创建 `.mcp.json`：
+
+```json
+{
+  "mcpServers": {
+    "context": {
+      "command": "node",
+      "args": ["d:/manyao.zhu/mcp/context/dist/index.js"]
+    }
+  }
+}
+```
+
+> **注意**：使用项目级 `.mcp.json` 时，需要在 CodeBuddy 设置中启用项目 MCP 服务器。可在 `settings.json` 中添加 `"enableAllProjectMcpServers": true`，或在设置面板中手动批准。配置后使用 `/mcp` 命令检查连接状态。
+
 ### 发布到 npm 后使用
 
 发布后可直接通过 npx 运行，无需手动指定路径：
@@ -351,6 +383,24 @@ alwaysApply: true
 - 重要架构决策保存到 architecture 分类，priority 设为 high
 - 遇到并解决的 Bug，保存到 error 分类
 - 使用 tags 标注涉及的技术栈
+```
+
+### CodeBuddy（CODEBUDDY.md）
+
+CodeBuddy 使用 `CODEBUDDY.md` 作为规则文件，支持用户级和项目级：
+
+- **用户级**：`~/.codebuddy/CODEBUDDY.md`（适用于所有项目）
+- **项目级**：项目根目录下的 `CODEBUDDY.md`（优先级更高）
+
+```markdown
+## 上下文管理规则
+
+- 每次开始新会话时，先调用 context_auto_load 恢复项目上下文
+- 重要架构决策保存到 architecture 分类，priority 设为 high
+- 遇到并解决的 Bug，保存到 error 分类
+- 每次开发结束前，保存当前进度到 progress 分类
+- 使用 tags 标注涉及的技术栈（如 react、database、auth）
+- 文件较大时主动调用 context_compress 压缩
 ```
 
 ## 技术栈
